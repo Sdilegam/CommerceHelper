@@ -1,4 +1,3 @@
-
 public class RootObject
 {
     public int total { get; set; }
@@ -25,7 +24,7 @@ public class Data
     public bool isColorable { get; set; }
     public int recipeSlots { get; set; }
     public int[] recipeIds { get; set; }
-    public object[] dropMonsterIds { get; set; }
+    public int[] dropMonsterIds { get; set; }
     public object[] dropTemporisMonsterIds { get; set; }
     public PossibleEffects[] possibleEffects { get; set; }
     public object[] evolutiveEffectIds { get; set; }
@@ -36,8 +35,8 @@ public class Data
     public string craftConditional { get; set; }
     public string craftFeasible { get; set; }
     public string visibility { get; set; }
-    public int recyclingNuggets { get; set; }
-    public object[] favoriteRecyclingSubareas { get; set; }
+    public double recyclingNuggets { get; set; }
+    public int[] favoriteRecyclingSubareas { get; set; }
     public object[] resourcesBySubarea { get; set; }
     public string changeVersion { get; set; }
     public long? tooltipExpirationDate { get; set; }
@@ -51,7 +50,6 @@ public class Data
     public bool castInDiagonal { get; set; }
     public bool castTestLos { get; set; }
     public int maxCastPerTurn { get; set; }
-    public string className { get; set; }
     public Name name { get; set; }
     public Description description { get; set; }
     public ImportantNotice importantNotice { get; set; }
@@ -71,23 +69,24 @@ public class Data
     public bool isDestructible { get; set; }
     public bool isSaleable { get; set; }
     public bool isLegendary { get; set; }
+    public string className { get; set; }
     public int m_id { get; set; }
     public int[] questsThatUse { get; set; }
-    public object[] questsThatReward { get; set; }
+    public int[] questsThatReward { get; set; }
     public bool hasRecipe { get; set; }
     public bool hasLivingObjectSkinJntMood { get; set; }
     public int[] recipesThatUse { get; set; }
     public int startLegendaryTreasureHunt { get; set; }
     public int legendaryTreasureHuntThatReward { get; set; }
-    public object[] achievementsThatReward { get; set; }
+    public int[] achievementsThatReward { get; set; }
     public Slug slug { get; set; }
     public Effects[] effects { get; set; }
     public string createdAt { get; set; }
     public string updatedAt { get; set; }
     public string img { get; set; }
     public object itemSet { get; set; }
-    public object appearance { get; set; }
     public Type type { get; set; }
+    public Appearance appearance { get; set; }
 }
 
 public class PossibleEffects
@@ -114,13 +113,13 @@ public class PossibleEffects
     public int diceNum { get; set; }
     public int diceSide { get; set; }
     public bool displayZero { get; set; }
-    public string className { get; set; }
     public bool visibleInTooltip { get; set; }
     public bool visibleInBuffUi { get; set; }
     public bool visibleInFightLog { get; set; }
     public bool visibleOnTerrain { get; set; }
     public bool forClientOnly { get; set; }
     public bool trigger { get; set; }
+    public string className { get; set; }
 }
 
 public class ZoneDescr
@@ -137,34 +136,39 @@ public class ZoneDescr
 public class Name
 {
     public string id { get; set; }
-    public string en { get; set; }
     public string pt { get; set; }
-    public string es { get; set; }
+    public string en { get; set; }
     public string fr { get; set; }
+    public string es { get; set; }
     public string de { get; set; }
 }
 
 public class Description
 {
     public string id { get; set; }
-    public string en { get; set; }
     public string pt { get; set; }
-    public string es { get; set; }
+    public string en { get; set; }
     public string fr { get; set; }
+    public string es { get; set; }
     public string de { get; set; }
 }
 
 public class ImportantNotice
 {
     public string id { get; set; }
+    public string pt { get; set; }
+    public string en { get; set; }
+    public string fr { get; set; }
+    public string es { get; set; }
+    public string de { get; set; }
 }
 
 public class Slug
 {
-    public string en { get; set; }
     public string pt { get; set; }
-    public string es { get; set; }
+    public string en { get; set; }
     public string fr { get; set; }
+    public string es { get; set; }
     public string de { get; set; }
 }
 
@@ -192,8 +196,8 @@ public class Type
     public int craftXpRatio { get; set; }
     public int evolutiveTypeId { get; set; }
     public object[] possiblePositions { get; set; }
-    public string className { get; set; }
     public Name1 name { get; set; }
+    public string className { get; set; }
     public int m_id { get; set; }
     public string createdAt { get; set; }
     public string updatedAt { get; set; }
@@ -203,10 +207,10 @@ public class Type
 public class Name1
 {
     public string id { get; set; }
-    public string en { get; set; }
     public string pt { get; set; }
-    public string es { get; set; }
+    public string en { get; set; }
     public string fr { get; set; }
+    public string es { get; set; }
     public string de { get; set; }
 }
 
@@ -229,5 +233,18 @@ public class Name2
     public string de { get; set; }
     public string it { get; set; }
     public string es { get; set; }
+}
+
+public class Appearance
+{
+    public string _id { get; set; }
+    public object[] colors { get; set; }
+    public int id { get; set; }
+    public int? bone { get; set; }
+    public int? skin { get; set; }
+    public int size { get; set; }
+    public string createdAt { get; set; }
+    public string updatedAt { get; set; }
+    public int __v { get; set; }
 }
 

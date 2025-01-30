@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceHelper", "CommerceHelper\CommerceHelper.csproj", "{877320C0-3E0B-4A03-8959-D83B703F7077}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceHelperPuller", "CommerceHelperPuller\CommerceHelperPuller.csproj", "{877320C0-3E0B-4A03-8959-D83B703F7077}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommerceHelperDB", "CommerceHelperDB\CommerceHelperDB.csproj", "{564D7A62-2CAE-4274-A17B-1562735C6F37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +14,9 @@ Global
 		{877320C0-3E0B-4A03-8959-D83B703F7077}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{877320C0-3E0B-4A03-8959-D83B703F7077}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{877320C0-3E0B-4A03-8959-D83B703F7077}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564D7A62-2CAE-4274-A17B-1562735C6F37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564D7A62-2CAE-4274-A17B-1562735C6F37}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564D7A62-2CAE-4274-A17B-1562735C6F37}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564D7A62-2CAE-4274-A17B-1562735C6F37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
