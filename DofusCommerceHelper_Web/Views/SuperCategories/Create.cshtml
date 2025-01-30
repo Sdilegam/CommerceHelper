@@ -1,0 +1,35 @@
+@model CommerceHelperDB.Models.SuperCategory
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>SuperCategory</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="SuperCategoryInGameId" class="control-label"></label>
+                <input asp-for="SuperCategoryInGameId" class="form-control" />
+                <span asp-validation-for="SuperCategoryInGameId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SuperCategoryName" class="control-label"></label>
+                <input asp-for="SuperCategoryName" class="form-control" />
+                <span asp-validation-for="SuperCategoryName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
