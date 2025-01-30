@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CommerceHelperDB.Models;
 
-// [Index(nameof(InGameID), IsUnique = true)]
+[Index("InGameID", IsUnique = true)]
 public class Item
 {
 	public int ItemId { get; set; }

@@ -14,9 +14,11 @@ async Task GetRessourceslist(HttpClient ClientHttp)
 {
 	using (var Context = new CommerceHelperContext())
 	{
+		Context.Database.EnsureCreated();
+		List<Item> listItems= Context.Items.ToList();
 		int step = 50;
 		int CurrentIndex = 0;
-		bool test = true;
+		bool test = false;
 		do
 		{
 			string path =
@@ -32,7 +34,7 @@ async Task GetRessourceslist(HttpClient ClientHttp)
 					ItemDescription = ParsedItem.description.fr,
 					ItemLvl = ParsedItem.level,
 				};
-				if (!Context.Items.Any(x => x.InGameId == ParsedItem.id))
+				if (!listItems.Any(x => x.InGameId == ParsedItem.id))
 					Context.Items.AddAsync(item);
 			}
 			CurrentIndex += step;
