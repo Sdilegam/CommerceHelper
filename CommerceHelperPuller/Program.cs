@@ -3,6 +3,7 @@ using System.Net.Http.Json;
 using CommerceHelperDB.Models;
 using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 RootObject data;
 
@@ -45,8 +46,12 @@ async Task GetRessourceslist(HttpClient ClientHttp)
 					};
 					Context.SuperCategory.Add(superCategory);
 				}
+				else
+				{
+					Console.WriteLine($"Super categorie: {SuperCategoryId}");
+				}
 				int CategoryId = ParsedItem.typeId;
-				Category? category = ListCategory.Find(x => x.CategoryInGameId == CategoryId);
+				Category? category = Context.Category.FirstOrDefault(x => x.CategoryInGameId == CategoryId);
 				if (category == null)
 				{
 					category = new Category
@@ -55,7 +60,12 @@ async Task GetRessourceslist(HttpClient ClientHttp)
 						CategoryName = ParsedItem.type.name.fr,
 						SuperCategory = superCategory,
 					};
-					Context.Category.Add(category);
+					EntityEntry<Category> test1 = Context.Category.Add(category);
+					test1.State = EntityState.Added;
+				}
+				else
+				{
+					Console.WriteLine($"Categorie: {CategoryId}");
 				}
 				Item item = new Item
 				{
