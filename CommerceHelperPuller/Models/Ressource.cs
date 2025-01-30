@@ -14,7 +14,7 @@ public class Data
     public int typeId { get; set; }
     public int iconId { get; set; }
     public int level { get; set; }
-    public int realWeight { get; set; }
+    // public int realWeight { get; set; }
     public int useAnimationId { get; set; }
     public int price { get; set; }
     public int itemSetId { get; set; }
