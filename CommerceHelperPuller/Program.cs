@@ -1,5 +1,7 @@
-﻿using System.Net.Http.Json;
+﻿using System.Diagnostics;
+using System.Net.Http.Json;
 using CommerceHelperDB.Models;
+using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 
 RootObject data;
@@ -15,10 +17,15 @@ async Task GetRessourceslist(HttpClient ClientHttp)
 	using (var Context = new CommerceHelperContext())
 	{
 		Context.Database.EnsureCreated();
-		List<Item> listItems= Context.Items.ToList();
+		Context.Item.ExecuteDelete();
+		Context.Category.ExecuteDelete();
+		Context.SuperCategory.ExecuteDelete();
+		List<Item> ListItems= Context.Item.AsNoTracking().ToList();
+		List<Category> ListCategory= Context.Category.AsNoTracking().ToList();
+		List<SuperCategory> ListSuperCategory= Context.SuperCategory.AsNoTracking().ToList();
 		int step = 50;
 		int CurrentIndex = 0;
-		bool test = false;
+		bool test = true;
 		do
 		{
 			string path =
@@ -27,20 +34,45 @@ async Task GetRessourceslist(HttpClient ClientHttp)
 			data = await Response.Content.ReadFromJsonAsync<RootObject>();
 			foreach (var ParsedItem in data.data)
 			{
+				int SuperCategoryId = ParsedItem.type.superTypeId;
+				SuperCategory? superCategory = ListSuperCategory.Find(x => x.SuperCategoryInGameId == SuperCategoryId);
+				if (superCategory == null)
+				{
+					superCategory = new SuperCategory
+					{
+						SuperCategoryInGameId = SuperCategoryId,
+						SuperCategoryName = ParsedItem.type.superType.name.fr
+					};
+					Context.SuperCategory.Add(superCategory);
+				}
+				int CategoryId = ParsedItem.typeId;
+				Category? category = ListCategory.Find(x => x.CategoryInGameId == CategoryId);
+				if (category == null)
+				{
+					category = new Category
+					{
+						CategoryInGameId = CategoryId,
+						CategoryName = ParsedItem.type.name.fr,
+						SuperCategory = superCategory,
+					};
+					Context.Category.Add(category);
+				}
 				Item item = new Item
 				{
 					InGameId = ParsedItem.id,
 					ItemName = ParsedItem.name.fr,
 					ItemDescription = ParsedItem.description.fr,
 					ItemLvl = ParsedItem.level,
+					Category = category,
+					IconUrl = ParsedItem.img
 				};
-				if (!listItems.Any(x => x.InGameId == ParsedItem.id))
-					Context.Items.AddAsync(item);
+				if (ListItems.All(x => x.InGameId != ParsedItem.id))
+					Context.Item.Add(item);
 			}
 			CurrentIndex += step;
 		} while (data.data.Count() == step && (test ? CurrentIndex < 300 : true));
 
-		Context.SaveChanges();
+		await Context.SaveChangesAsync();
 	}
 }
 

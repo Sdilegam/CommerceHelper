@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="EFCore.BulkExtensions.Sqlite" Version="8.1.2" />
       <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.1" />
     </ItemGroup>
 

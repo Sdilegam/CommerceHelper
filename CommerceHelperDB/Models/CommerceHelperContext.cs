@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommerceHelperDB.Models;
@@ -20,6 +21,8 @@ public class CommerceHelperContext: DbContext
 	// special "local" folder for your platform.
 	protected override void OnConfiguring(DbContextOptionsBuilder options)
 		=> options.UseSqlite($"Data Source={DbPath}");
-	public DbSet<Item> Items { get; set; }
-	public DbSet<Price> Prices { get; set; }
+	public DbSet<Item> Item { get; set; }
+	public DbSet<Price> Price { get; set; }
+	public DbSet<SuperCategory> SuperCategory { get; set; }
+	public DbSet<Category> Category { get; set; }
 }
