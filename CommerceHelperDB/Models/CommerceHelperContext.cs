@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
+using System.Data.SQLite;
 
 namespace CommerceHelperDB.Models;
 
@@ -8,12 +9,12 @@ public class CommerceHelperContext: DbContext
 	public string DbPath { get; }
 	public CommerceHelperContext()
 	{
-		var folder = Environment.SpecialFolder.LocalApplicationData;
-		var path = "/home/salvatore/RiderProjects/CommerceHelper/CommerceHelperDB/";
-		DbPath = System.IO.Path.Join(path, "CommerceHelper.sqlite");
+		string folder = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
+		string filename = "CommerceHelper.sqlite";
+		DbPath = System.IO.Path.Join(folder, filename);
 		if (!File.Exists(DbPath))
 		{
-			File.Create(DbPath);
+			SQLiteConnection.CreateFile(DbPath);
 		}
 	}
 
