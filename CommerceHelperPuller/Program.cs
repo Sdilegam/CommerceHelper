@@ -5,92 +5,120 @@ using EFCore.BulkExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-RootObject data;
 
 using (HttpClient ClientHttp = new HttpClient())
 {
-	 await GetRessourceslist(ClientHttp);
+    List<Data> DataList = new();
+    using (var Context = new CommerceHelperContext())
+    {
+        Context.Database.EnsureCreated();
+        if (true)
+            ClearDB(Context);
+        DataList = await GetDatalist(ClientHttp, Context);
+        ListToDb(DataList, Context);
+        Context.SaveChanges();
+    }
 }
 
-
-async Task GetRessourceslist(HttpClient ClientHttp)
+void ClearDB(CommerceHelperContext context)
 {
-	using (var Context = new CommerceHelperContext())
-	{
-		Context.Database.EnsureCreated();
-		Context.Item.ExecuteDelete();
-		Context.Category.ExecuteDelete();
-		Context.SuperCategory.ExecuteDelete();
-		List<Item> ListItems= Context.Item.AsNoTracking().ToList();
-		List<Category> ListCategory= Context.Category.AsNoTracking().ToList();
-		List<SuperCategory> ListSuperCategory= Context.SuperCategory.AsNoTracking().ToList();
-		int step = 50;
-		int CurrentIndex = 0;
-		bool test = true;
-		do
-		{
-			string path =
-				$"https://api.dofusdb.fr/items?typeId[$ne]=203&$sort=slug.fr&$skip={CurrentIndex}&$limit={step}";
-			HttpResponseMessage Response = await ClientHttp.GetAsync(path);
-			data = await Response.Content.ReadFromJsonAsync<RootObject>();
-			foreach (var ParsedItem in data.data)
-			{
-				int SuperCategoryId = ParsedItem.type.superTypeId;
-				SuperCategory? superCategory = ListSuperCategory.Find(x => x.SuperCategoryInGameId == SuperCategoryId);
-				if (superCategory == null)
-				{
-					superCategory = new SuperCategory
-					{
-						SuperCategoryInGameId = SuperCategoryId,
-						SuperCategoryName = ParsedItem.type.superType.name.fr
-					};
-					Context.SuperCategory.Add(superCategory);
-				}
-				else
-				{
-					Console.WriteLine($"Super categorie: {SuperCategoryId}");
-				}
-				int CategoryId = ParsedItem.typeId;
-				Category? category = Context.Category.FirstOrDefault(x => x.CategoryInGameId == CategoryId);
-				if (category == null)
-				{
-					category = new Category
-					{
-						CategoryInGameId = CategoryId,
-						CategoryName = ParsedItem.type.name.fr,
-						SuperCategory = superCategory,
-					};
-					EntityEntry<Category> test1 = Context.Category.Add(category);
-					test1.State = EntityState.Added;
-				}
-				else
-				{
-					Console.WriteLine($"Categorie: {CategoryId}");
-				}
-				Item item = new Item
-				{
-					InGameId = ParsedItem.id,
-					ItemName = ParsedItem.name.fr,
-					ItemDescription = ParsedItem.description.fr,
-					ItemLvl = ParsedItem.level,
-					Category = category,
-					IconUrl = ParsedItem.img
-				};
-				if (ListItems.All(x => x.InGameId != ParsedItem.id))
-					Context.Item.Add(item);
-			}
-			CurrentIndex += step;
-		} while (data.data.Count() == step && (test ? CurrentIndex < 300 : true));
+    context.Item.ExecuteDeleteAsync();
+    context.Category.ExecuteDeleteAsync();
+    context.SuperCategory.ExecuteDeleteAsync();
+}
 
-		await Context.SaveChangesAsync();
-	}
+async Task<Data[]> GetItems(HttpClient ClientHttp, int start, int limit)
+{
+    RootObject data;
+    string path = $"https://api.dofusdb.fr/items?typeId[$ne]=203&$sort=slug.fr&$skip={start}&$limit={limit}";
+    HttpResponseMessage Response = await ClientHttp.GetAsync(path);
+    data = await Response.Content.ReadFromJsonAsync<RootObject>();
+    return (data.data);
+}
+
+void ListToDb(List<Data> QueryReturn, CommerceHelperContext Context)
+{
+    List<Item>? ItemsList = Context.Item.AsNoTracking().ToList();
+    List<Category>? CategoryList = Context.Category.AsNoTracking().ToList();
+    List<SuperCategory>? SuperCategoryList = Context.SuperCategory.AsNoTracking().ToList();
+
+    foreach (var QueryItem in QueryReturn)
+    {
+        int SuperCategoryId = QueryItem.type.superTypeId;
+        int CategoryId = QueryItem.typeId;
+        SuperCategory? superCategory = SuperCategoryList.FirstOrDefault(Item => Item.SuperCategoryInGameId == SuperCategoryId);
+        Category? category = CategoryList.FirstOrDefault(Item => Item.CategoryInGameId == CategoryId);
+
+        if (superCategory == null)
+        {
+            superCategory = new SuperCategory
+            {
+                SuperCategoryInGameId = SuperCategoryId,
+                SuperCategoryName = QueryItem.type.superType.name.fr
+            };
+            SuperCategoryList.Add(superCategory);
+        }
+
+        if (category == null)
+        {
+            category = new Category
+            {
+                CategoryInGameId = CategoryId,
+                CategoryName = QueryItem.type.name.fr,
+                SuperCategory = superCategory,
+            };
+            CategoryList.Add(category);
+        }
+
+        if (ItemsList.All(x => x.InGameId != QueryItem.id))
+        {
+            Item item = new Item
+            {
+                InGameId = QueryItem.id,
+                ItemName = QueryItem.name.fr,
+                ItemDescription = QueryItem.description.fr,
+                ItemLvl = QueryItem.level,
+                Category = category,
+                IconUrl = QueryItem.img
+            };
+            ItemsList.Add(item);
+        }
+    }
+    Context.AddRange(SuperCategoryList);
+    Context.AddRange(CategoryList);
+    Context.AddRange(ItemsList);
+}
+
+async Task<List<Data>> GetDatalist(HttpClient ClientHttp, CommerceHelperContext Context)
+{
+    List<Data>? DataList = new();
+    Data[] QueryReturn;
+
+    int step = 50;
+    int CurrentIndex = 0;
+    bool IsDev = false;
+    bool Logging = false;
+
+    do
+    {
+        QueryReturn = (GetItems(ClientHttp, CurrentIndex, step).Result);
+        if (QueryReturn.Length > 0 && Logging)
+        {
+            Console.Clear();
+            Console.WriteLine($"Current Item: [{QueryReturn[0]?.id}] {QueryReturn[0]?.name.fr}");
+            Console.WriteLine($"Current number: {CurrentIndex}");
+        }
+        DataList.AddRange<Data>(QueryReturn);
+        CurrentIndex += step;
+    } while (QueryReturn.Count() == step && (IsDev ? CurrentIndex < 300 : true));
+    return (DataList);
 }
 
 
 async Task<int> GetTotalItems(HttpClient ClientHttp)
 {
-	string path = "https://api.dofusdb.fr/items?$limit=0";
-	HttpResponseMessage Response = await ClientHttp.GetAsync(path);
-	var data = await Response.Content.ReadFromJsonAsync<RootObject>();
-	return (data.total);
+    string path = "https://api.dofusdb.fr/items?$limit=0";
+    HttpResponseMessage Response = await ClientHttp.GetAsync(path);
+    var data = await Response.Content.ReadFromJsonAsync<RootObject>();
+    return (data.total);
 }
