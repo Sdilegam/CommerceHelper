@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CommerceHelperDB.Models;
+using System.Globalization;
 
 namespace DofusCommerceHelper_Web.Controllers
 {
@@ -19,9 +20,16 @@ namespace DofusCommerceHelper_Web.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string SearchString, int Page = 1, int amount = 10)
         {
-            return View(await _context.Item.ToListAsync());
+            TempData["PageNbr"] = Page;
+            ViewData["SearchString"] = SearchString;
+           // List<Item> ItemsList = (from p in _context.Item
+								   //where EF.Functions.Like(EF.Functions.Collate(p.ItemName, "Latin1_General_CI_AI"), $"%{SearchString}%")
+								   //select p).ToList();
+			List<Item> ItemsList = _context.Item.ToList().Where(x => (SearchString??"").Split().All(s=> x.ItemName.Contains(s, StringComparison.CurrentCultureIgnoreCase))).ToList();
+			//return View(_context.Item.Where(x => x.ItemName.Contains((SearchString??""), StringComparison.CurrentCultureIgnoreCase)).Skip(50* Page).Take(50).ToList());
+			return View(ItemsList.Skip(amount * (Page-1)).Take(amount).ToList());
         }
 
         // GET: Items/Details/5

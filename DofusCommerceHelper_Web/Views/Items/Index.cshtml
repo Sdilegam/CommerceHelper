@@ -1,59 +1,79 @@
 @model IEnumerable<CommerceHelperDB.Models.Item>
 
 @{
-    ViewData["Title"] = "Index";
+	ViewData["Title"] = "Index";
 }
 
 <h1>Index</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<form asp-action="Index" asp-route-SearchString="@ViewData["SearchString"]" method="get">
+	<input name="SearchString" value="@ViewData["SearchString"]">
+	<button>Search</button>
+</form>
+
+
 <table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.IconUrl)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.InGameId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemDescription)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ItemLvl)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                <img src="@Html.DisplayFor(modelItem => item.IconUrl)">
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.InGameId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemDescription)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ItemLvl)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
+	<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.IconUrl)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ItemId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.InGameId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ItemName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ItemDescription)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.ItemLvl)
+			</th>
+			<th></th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model)
+		{
+			<tr>
+				<td>
+					<img src="@Html.DisplayFor(modelItem => item.IconUrl)" loading="lazy">
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ItemId)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.InGameId)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ItemName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ItemDescription)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.ItemLvl)
+				</td>
+				<td>
+					<a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
+					<a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
+					<a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
+				</td>
+			</tr>
+		}
+	</tbody>
 </table>
+
+@{
+	int prev = int.Parse(TempData["PageNbr"].ToString()) - 1;
+	int next = int.Parse(TempData["PageNbr"].ToString()) + 1;
+}
+@if (prev > 0)
+{
+	<a asp-route-Page="@prev" asp-route-SearchString="@ViewData["SearchString"]">@(prev)</a>
+}
+<a asp-route-Page="@next" asp-route-SearchString="@ViewData["SearchString"]">@(next)</a>
