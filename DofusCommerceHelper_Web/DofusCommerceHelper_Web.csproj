@@ -4,10 +4,12 @@
         <TargetFramework>net8.0</TargetFramework>
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>4c227dff-e0b9-4eee-9356-f451765154b1</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\CommerceHelperDB\CommerceHelperDB.csproj" />
+      <ProjectReference Include="..\UtilsLibrary\UtilsLibrary.csproj" />
     </ItemGroup>
 
     <ItemGroup>

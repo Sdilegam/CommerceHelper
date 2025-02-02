@@ -1,13 +1,11 @@
+@using CommerceHelperDB.Models
 @model IEnumerable<CommerceHelperDB.Models.Item>
-
-@{
-	ViewData["Title"] = "Index";
-}
 
 <h1>Index</h1>
 
-<form asp-action="Index" asp-route-SearchString="@ViewData["SearchString"]" method="get">
+<form asp-action="Index" asp-route-SearchString="@ViewData["SearchString"]" asp-route-Category="@ViewData["Category"]" method="get">
 	<input name="SearchString" value="@ViewData["SearchString"]">
+	@Html.DropDownList("CategoryId", new SelectList((List<Category>)@TempData["CategoryList"], "CategoryId", "CategoryName", "Categorie"))
 	<button>Search</button>
 </form>
 
@@ -32,6 +30,12 @@
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.ItemLvl)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Category.CategoryName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Category.SuperCategory.SuperCategoryName)
 			</th>
 			<th></th>
 		</tr>
@@ -59,6 +63,12 @@
 					@Html.DisplayFor(modelItem => item.ItemLvl)
 				</td>
 				<td>
+					@Html.DisplayFor(modelItem => item.Category.CategoryName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Category.SuperCategory.SuperCategoryName)
+				</td>
+				<td>
 					<a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
 					<a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
 					<a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
@@ -74,6 +84,6 @@
 }
 @if (prev > 0)
 {
-	<a asp-route-Page="@prev" asp-route-SearchString="@ViewData["SearchString"]">@(prev)</a>
+	<a asp-route-Page="@prev" asp-route-SearchString="@ViewData["SearchString"]" asp-route-CategoryId="@ViewData["CategoryId"]">@(prev)</a>
 }
-<a asp-route-Page="@next" asp-route-SearchString="@ViewData["SearchString"]">@(next)</a>
+<a asp-route-Page="@next" asp-route-SearchString="@ViewData["SearchString"]" asp-route-CategoryId="@ViewData["CategoryId"]">@(next)</a>

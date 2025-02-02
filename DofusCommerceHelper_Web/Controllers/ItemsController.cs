@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using CommerceHelperDB.Models;
 using System.Globalization;
+using UtilsLibrary;
 
 namespace DofusCommerceHelper_Web.Controllers
 {
@@ -20,16 +21,24 @@ namespace DofusCommerceHelper_Web.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index(string SearchString, int Page = 1, int amount = 10)
+        public async Task<IActionResult> Index(string SearchString, int Page = 1, int Amount = 10, int CategoryId = -1, int SuperCategoryId = -1)
         {
             TempData["PageNbr"] = Page;
             ViewData["SearchString"] = SearchString;
-           // List<Item> ItemsList = (from p in _context.Item
-								   //where EF.Functions.Like(EF.Functions.Collate(p.ItemName, "Latin1_General_CI_AI"), $"%{SearchString}%")
-								   //select p).ToList();
-			List<Item> ItemsList = _context.Item.ToList().Where(x => (SearchString??"").Split().All(s=> x.ItemName.Contains(s, StringComparison.CurrentCultureIgnoreCase))).ToList();
-			//return View(_context.Item.Where(x => x.ItemName.Contains((SearchString??""), StringComparison.CurrentCultureIgnoreCase)).Skip(50* Page).Take(50).ToList());
-			return View(ItemsList.Skip(amount * (Page-1)).Take(amount).ToList());
+			ViewData["CategoryId"] = CategoryId;
+			TempData["CategoryList"] = _context.Category.Include(p=>p.SuperCategory).OrderBy(p=>p.CategoryName).ToList();
+			IEnumerable<Item> ItemsList = _context.Item.Include(p => p.Category).ThenInclude(p => p.SuperCategory);
+
+            if (CategoryId != -1 )
+				ItemsList= ItemsList.Where(p=>p.Category.CategoryId == CategoryId);
+			if (SuperCategoryId != -1)
+				ItemsList = ItemsList.Where(p => p.Category.SuperCategory.SuperCategoryId == SuperCategoryId);
+            if (SearchString != null && SearchString != "")
+            {
+                string[] SearchList = SearchString.Split();
+				ItemsList = ItemsList.ToList().Where(x => SearchList.All(s => x.ItemName.RemoveAccents().Contains(s.RemoveAccents())));
+            }
+            return View(ItemsList.Skip(Amount * (Page-1)).Take(Amount).ToList());
         }
 
         // GET: Items/Details/5
