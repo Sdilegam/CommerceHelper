@@ -4,34 +4,34 @@
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>@ViewData["Title"] - DofusCommerceHelper_Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <base href="~/" />
+    <link href="~/css/app.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/DofusCommerceHelper_Web.styles.css" asp-append-version="true"/>
 </head>
 <body>
-<header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-        <div class="container-fluid">
-            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">DofusCommerceHelper_Web</a>
+<header class="py-8 border-b-2 bg-pink-50">
+    <nav >
+        <div >
+            <a class="" asp-area="" asp-controller="Home" asp-action="Index">DofusCommerceHelper_Web</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                <ul class="navbar-nav flex-grow-1">
-                    <li class="nav-item">
+            <div>
+                <ul class="flex flex-row justify-around">
+                    <li class="navbarItem">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                    </li>
-                    <li class="nav-item">
+                     </li>
+                    <li class="navbarItem">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="navbarItem">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Items" asp-action="Index">Liste d'item</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="navbarItem">
                         <a class="nav-link text-dark" asp-area="" asp-controller="Categories" asp-action="Index">Liste de categories</a>
                     </li>
-                    <li class="nav-item">
+                    <li class="navbarItem">
                         <a class="nav-link text-dark" asp-area="" asp-controller="SuperCategories" asp-action="Index">Liste de super-categories</a>
                     </li>
                 </ul>
@@ -45,7 +45,7 @@
     </main>
 </div>
 
-<footer class="border-top footer text-muted">
+<footer class="">
     <div class="container">
         &copy; 2025 - DofusCommerceHelper_Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
     </div>

@@ -21,7 +21,7 @@ namespace DofusCommerceHelper_Web.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Category.ToListAsync());
+            return View(_context.Category.ToListAsync().Result.OrderBy(p=>p.CategoryInGameId));
         }
 
         // GET: Categories/Details/5

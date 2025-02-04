@@ -26,7 +26,8 @@ namespace DofusCommerceHelper_Web.Controllers
             TempData["PageNbr"] = Page;
             ViewData["SearchString"] = SearchString;
 			ViewData["CategoryId"] = CategoryId;
-			TempData["CategoryList"] = _context.Category.Include(p=>p.SuperCategory).OrderBy(p=>p.CategoryName).ToList();
+			TempData["CategoryList"] = _context.Category.Include(p=>p.SuperCategory).ToList().OrderBy(p=>p.CategoryName.RemoveAccents()).ToList();
+            ((List<Category>)TempData["CategoryList"]).Insert(0, new Category() { CategoryName = "----", CategoryId = -1 });
 			IEnumerable<Item> ItemsList = _context.Item.Include(p => p.Category).ThenInclude(p => p.SuperCategory);
 
             if (CategoryId != -1 )

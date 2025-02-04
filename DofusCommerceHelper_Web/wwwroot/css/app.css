@@ -1,0 +1,8 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.navbarItem {
+    @apply w-full bg-red-200
+}

@@ -21,7 +21,7 @@ namespace DofusCommerceHelper_Web.Controllers
         // GET: SuperCategories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.SuperCategory.ToListAsync());
+            return View(_context.SuperCategory.ToListAsync().Result.OrderBy(p=>p.SuperCategoryInGameId));
         }
 
         // GET: SuperCategories/Details/5
