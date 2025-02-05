@@ -21,7 +21,7 @@ namespace DofusCommerceHelper_Web.Controllers
         }
 
         // GET: Items
-        public async Task<IActionResult> Index(string SearchString, int Page = 1, int Amount = 10, int CategoryId = -1, int SuperCategoryId = -1)
+        public async Task<IActionResult> Index(string SearchString, int Page = 1, int Amount = 25, int CategoryId = -1, int SuperCategoryId = -1)
         {
             TempData["PageNbr"] = Page;
             ViewData["SearchString"] = SearchString;

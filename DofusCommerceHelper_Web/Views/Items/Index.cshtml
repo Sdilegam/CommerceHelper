@@ -1,89 +1,82 @@
 @using CommerceHelperDB.Models
 @model IEnumerable<CommerceHelperDB.Models.Item>
 
-<h1>Index</h1>
+<h1>Liste d'items</h1>
+<div id="ItemListGrid" class="grid grid-cols-[300px_1fr] transition-all duration-300 classClosed">
+	<div id="left-side" class="border-r-2 pr-3 border-gray-100 overflow-hidden">
 
-<form asp-action="Index" asp-route-SearchString="@ViewData["SearchString"]" asp-route-Category="@ViewData["Category"]" method="get">
-	<input name="SearchString" value="@ViewData["SearchString"]">
-	@Html.DropDownList("CategoryId", new SelectList((List<Category>)@TempData["CategoryList"], "CategoryId", "CategoryName", "Categorie"))
-	<button>Search</button>
-</form>
+		<form class="flex flex-col gap-y-4 sticky top-4" asp-action="Index"
+		      asp-route-SearchString="@ViewData["SearchString"]"
+		      asp-route-Category="@ViewData["Category"]" method="get">
+			<label>
+				Recherche:
+				<input class="w-full p-2 border-2 border-gray-200 rounded-xl mt-2" name="SearchString"
+				       value="@ViewData["SearchString"]">
+			</label>
+			<label>
+				Categorie
+				@* @Html.DropDownList("CategoryId", new SelectList((List<Category>)@TempData["CategoryList"], "CategoryId", "CategoryName")) *@
+				@{
+					var selectList = new SelectList((List<Category>)@TempData["CategoryList"], "CategoryId", "CategoryName");
+				}
+				@Html.DropDownList("CategoryId", @selectList, new { @class = "w-full mt-2 p-2 rounded-xl border-2" })
+			</label>
+			<button>Search</button>
+		</form>
 
+	</div>
 
-<table class="table">
-	<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.IconUrl)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ItemId)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.InGameId)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ItemName)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ItemDescription)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.ItemLvl)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Category.CategoryName)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Category.SuperCategory.SuperCategoryName)
-			</th>
-			<th></th>
-		</tr>
-	</thead>
-	<tbody>
-		@foreach (var item in Model)
-		{
+	<div class="relative bg-white">
+		<button id="CloseLeftSideBtn" class="absolute left-2 top-2 w-8 transition-all duration-300" onclick="toggleLeftBar(this);">></button>
+		<table class="table">
+			<thead class="border-b-2 border-gray-200">
 			<tr>
-				<td>
-					<img src="@Html.DisplayFor(modelItem => item.IconUrl)" loading="lazy">
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ItemId)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.InGameId)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ItemName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ItemDescription)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.ItemLvl)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Category.CategoryName)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Category.SuperCategory.SuperCategoryName)
-				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.ItemId">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.ItemId">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.ItemId">Delete</a>
-				</td>
+				<th colspan="2">
+					Objet
+				</th>
+				<th>
+					Niveau de l'item
+				</th>
+				<th class="w-52">
+					Categorie
+				</th>
 			</tr>
-		}
-	</tbody>
-</table>
+			</thead>
+			<tbody>
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						<img class="aspect-square max-w-24 h-24 w-24 box-content"
+						     src="@Html.DisplayFor(modelItem => item.IconUrl)" loading="lazy">
+					</td>
+					<td>
+						<a class="font-semibold mb-1" asp-action="Details"
+						   asp-route-id="@item.ItemId">@Html.DisplayFor(modelItem => item.ItemName)</a>
+						<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
+					<td class="text-center">
+						@Html.DisplayFor(modelItem => item.ItemLvl)
+					</td>
+					<td class="text-center">
+						<p class="font-semibold mb-2">@Html.DisplayFor(modelItem => item.Category.SuperCategory.SuperCategoryName)</p>
+						<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.Category.CategoryName)</p>
+					</td>
+					@* <a asp-action="Details" asp-route-id="@item.ItemId">Details</a> | *@
+				</tr>
+			}
+			</tbody>
+		</table>
 
-@{
-	int prev = int.Parse(TempData["PageNbr"].ToString()) - 1;
-	int next = int.Parse(TempData["PageNbr"].ToString()) + 1;
-}
-@if (prev > 0)
-{
-	<a asp-route-Page="@prev" asp-route-SearchString="@ViewData["SearchString"]" asp-route-CategoryId="@ViewData["CategoryId"]">@(prev)</a>
-}
-<a asp-route-Page="@next" asp-route-SearchString="@ViewData["SearchString"]" asp-route-CategoryId="@ViewData["CategoryId"]">@(next)</a>
+		@{
+			int prev = int.Parse(TempData["PageNbr"].ToString()) - 1;
+			int next = int.Parse(TempData["PageNbr"].ToString()) + 1;
+		}
+		@if (prev > 0)
+		{
+			<a asp-route-Page="@prev" asp-route-SearchString="@ViewData["SearchString"]"
+			   asp-route-CategoryId="@ViewData["CategoryId"]">@(prev)</a>
+		}
+		<a asp-route-Page="@next" asp-route-SearchString="@ViewData["SearchString"]"
+		   asp-route-CategoryId="@ViewData["CategoryId"]">@(next)</a>
+	</div>
+</div>
