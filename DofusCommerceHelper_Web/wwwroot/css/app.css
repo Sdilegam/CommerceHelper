@@ -11,6 +11,7 @@
 
 :root {
     font-family: "Poppins", "sans-serif";
+    --bg-color: #fff9f7;
 }
 .container{
     margin-inline: auto;

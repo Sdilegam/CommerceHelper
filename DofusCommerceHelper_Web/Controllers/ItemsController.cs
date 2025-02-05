@@ -20,6 +20,26 @@ namespace DofusCommerceHelper_Web.Controllers
             _context = context;
         }
 
+        public async Task<IActionResult> JsonTest(string SearchString, int Page = 1, int Amount = 25,
+            int CategoryId = -1, int SuperCategoryId = -1)
+        {
+            IEnumerable<Item> ItemsList = _context.Item.Include(p => p.Category).ThenInclude(p => p.SuperCategory);
+
+            if (CategoryId != -1 )
+                ItemsList= ItemsList.Where(p=>p.Category.CategoryId == CategoryId);
+            if (SuperCategoryId != -1)
+                ItemsList = ItemsList.Where(p => p.Category.SuperCategory.SuperCategoryId == SuperCategoryId);
+            if (SearchString != null && SearchString != "")
+            {
+                string[] SearchList = SearchString.Split();
+                ItemsList = ItemsList.ToList().Where(x => SearchList.All(s => x.ItemName.RemoveAccents().Contains(s.RemoveAccents())));
+            }
+            return Json(new
+            {
+                Data = ItemsList.Skip(Amount * (Page-1)).Take(Amount).ToList(),
+            });
+        }
+        
         // GET: Items
         public async Task<IActionResult> Index(string SearchString, int Page = 1, int Amount = 25, int CategoryId = -1, int SuperCategoryId = -1)
         {

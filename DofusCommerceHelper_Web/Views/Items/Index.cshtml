@@ -3,9 +3,9 @@
 
 <h1>Liste d'items</h1>
 <div id="ItemListGrid" class="grid grid-cols-[300px_1fr] transition-all duration-300 classClosed">
-	<div id="left-side" class="border-r-2 pr-3 border-gray-100 overflow-hidden">
+	<div id="left-side" class="border-r-2 pr-3 border-gray-100 contain-paint">
 
-		<form class="flex flex-col gap-y-4 sticky top-4" asp-action="Index"
+		<form class="flex flex-col gap-y-4 sticky top-4 pl-2" asp-action="Index"
 		      asp-route-SearchString="@ViewData["SearchString"]"
 		      asp-route-Category="@ViewData["Category"]" method="get">
 			<label>
@@ -26,10 +26,11 @@
 
 	</div>
 
-	<div class="relative bg-white">
-		<button id="CloseLeftSideBtn" class="absolute left-2 top-2 w-8 transition-all duration-300" onclick="toggleLeftBar(this);">></button>
-		<table class="table">
-			<thead class="border-b-2 border-gray-200">
+	<div class="relative bg-[var(--bg-color)]">
+		<button id="CloseLeftSideBtn" class="z-10 sticky m-4 top-0 w-8 transition-all duration-300" onclick="toggleLeftBar(this);"> > </button>
+		
+		<table class="table w-full">
+			<thead class="border-b-2 bg-[var(--bg-color)] border-gray-200 sticky top-0">
 			<tr>
 				<th colspan="2">
 					Objet
@@ -51,9 +52,9 @@
 						     src="@Html.DisplayFor(modelItem => item.IconUrl)" loading="lazy">
 					</td>
 					<td>
-						<a class="font-semibold mb-1" asp-action="Details"
-						   asp-route-id="@item.ItemId">@Html.DisplayFor(modelItem => item.ItemName)</a>
-						<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
+					<a class="font-semibold mb-1" asp-action="Details"
+					   asp-route-id="@item.ItemId">@Html.DisplayFor(modelItem => item.ItemName)</a>
+					<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
 					<td class="text-center">
 						@Html.DisplayFor(modelItem => item.ItemLvl)
 					</td>
@@ -66,6 +67,7 @@
 			}
 			</tbody>
 		</table>
+		
 
 		@{
 			int prev = int.Parse(TempData["PageNbr"].ToString()) - 1;

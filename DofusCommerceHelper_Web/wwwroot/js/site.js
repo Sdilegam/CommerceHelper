@@ -17,3 +17,10 @@ function toggleLeftBar(button){
         button.innerText= ">";
     }
 }
+
+
+
+function getItemList() {
+    fetch('https://jsonplaceholder.typicode.com/posts/').then(res => res.json()).then(data => {
+    })
+}
