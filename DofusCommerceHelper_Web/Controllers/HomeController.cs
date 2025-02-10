@@ -1,6 +1,6 @@
-using System.Diagnostics;
 using DofusCommerceHelper_Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace DofusCommerceHelper_Web.Controllers;
 

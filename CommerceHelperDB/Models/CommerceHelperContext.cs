@@ -1,10 +1,9 @@
-using System.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using System.Data.SQLite;
 
 namespace CommerceHelperDB.Models;
 
-public class CommerceHelperContext: DbContext
+public class CommerceHelperContext : DbContext
 {
 	public string DbPath { get; }
 	public CommerceHelperContext()

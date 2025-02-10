@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
     margin: 0;
     padding: 0;
 }
@@ -13,30 +13,34 @@
     font-family: "Poppins", "sans-serif";
     --bg-color: #fff9f7;
 }
-.container{
+
+.container {
     margin-inline: auto;
 }
 
-button{
+button {
     @apply rounded-xl bg-sky-50 border-2 border-sky-100 py-2 hover:bg-sky-200
 }
 
-h1{
+h1 {
     @apply font-bold text-2xl mt-3 mb-5
 }
 
 tr {
-    img{
-       @apply  rounded-md bg-gray-100 p-2
-   }
-   @apply even:bg-gray-100 py-4
+    img
+
+{
+    @apply rounded-md bg-gray-100 p-2
 }
 
-tr:nth-child(even) img{
+@apply even:bg-gray-100 py-4
+}
+
+tr:nth-child(even) img {
     @apply bg-white
 }
 
-td, th{
+td, th {
     @apply p-4 align-top
 }
 
@@ -48,7 +52,7 @@ td, th{
     @apply w-full hover:bg-sky-100 flex items-center justify-center px-2 py-2 rounded-lg
 }
 
-.classClosed{
+.classClosed {
     @apply grid-cols-[0px_1fr] !important
 }
 

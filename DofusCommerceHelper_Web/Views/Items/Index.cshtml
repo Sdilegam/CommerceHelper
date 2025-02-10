@@ -6,12 +6,12 @@
 	<div id="left-side" class="border-r-2 pr-3 border-gray-100 contain-paint">
 
 		<form class="flex flex-col gap-y-4 sticky top-4 pl-2" asp-action="Index"
-		      asp-route-SearchString="@ViewData["SearchString"]"
-		      asp-route-Category="@ViewData["Category"]" method="get">
+			  asp-route-SearchString="@ViewData["SearchString"]"
+			  asp-route-Category="@ViewData["Category"]" method="get">
 			<label>
 				Recherche:
 				<input class="w-full p-2 border-2 border-gray-200 rounded-xl mt-2" name="SearchString"
-				       value="@ViewData["SearchString"]">
+					   value="@ViewData["SearchString"]">
 			</label>
 			<label>
 				Categorie
@@ -28,46 +28,60 @@
 
 	<div class="relative bg-[var(--bg-color)]">
 		<button id="CloseLeftSideBtn" class="z-10 sticky m-4 top-0 w-8 transition-all duration-300" onclick="toggleLeftBar(this);"> > </button>
-		
+
 		<table class="table w-full">
 			<thead class="border-b-2 bg-[var(--bg-color)] border-gray-200 sticky top-0">
-			<tr>
-				<th colspan="2">
-					Objet
-				</th>
-				<th>
-					Niveau de l'item
-				</th>
-				<th class="w-52">
-					Categorie
-				</th>
-			</tr>
+				<tr>
+					<th colspan="2">
+						Objet
+					</th>
+					<th>
+						Niveau de l'item
+					</th>
+					<th class="w-40">
+						Categorie
+					</th>
+					<th class="w-44">
+						Prix
+					</th>
+				</tr>
 			</thead>
 			<tbody>
-			@foreach (var item in Model)
-			{
-				<tr>
-					<td>
-						<img class="aspect-square max-w-24 h-24 w-24 box-content"
-						     src="@Html.DisplayFor(modelItem => item.IconUrl)" loading="lazy">
-					</td>
-					<td>
-					<a class="font-semibold mb-1" asp-action="Details"
-					   asp-route-id="@item.ItemId">@Html.DisplayFor(modelItem => item.ItemName)</a>
-					<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
-					<td class="text-center">
-						@Html.DisplayFor(modelItem => item.ItemLvl)
-					</td>
-					<td class="text-center">
-						<p class="font-semibold mb-2">@Html.DisplayFor(modelItem => item.Category.SuperCategory.SuperCategoryName)</p>
-						<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.Category.CategoryName)</p>
-					</td>
+				@foreach (var item in Model)
+				{
+					<tr>
+						<td>
+							<img class="aspect-square max-w-24 h-24 w-24 box-content"
+								 src="@Html.DisplayFor(modelItem => item.IconUrl)" loading="lazy">
+						</td>
+						<td>
+							<a class="font-semibold mb-1" asp-action="Details"
+							   asp-route-id="@item.ItemId">@Html.DisplayFor(modelItem => item.ItemName)</a>
+							<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.ItemDescription)</p>
+						<td class="text-center">
+								@Html.DisplayFor(modelItem => item.ItemLvl)
+						</td>
+						<td class="text-center">
+							<p class="font-semibold mb-2">@Html.DisplayFor(modelItem => item.Category.SuperCategory.SuperCategoryName)</p>
+							<p class="font-normal text-sm text-gray-600">@Html.DisplayFor(modelItem => item.Category.CategoryName)</p>
+						</td>
+						<td class="text-center">
+							<form class="grid grid-cols-[auto_1fr] gap-2 items-center" action="/" method="post">
+								@for (int i = 1; i <= 100; i = i *10)
+								{
+									<label class="text-start text-sm">
+										@i
+									</label>
+									<input class="p-2 rounded-md" type="text" name="name" value="" />
+								}
+							</form>
+						</td>
 					@* <a asp-action="Details" asp-route-id="@item.ItemId">Details</a> | *@
-				</tr>
-			}
+					</tr>
+				}
 			</tbody>
 		</table>
-		
+
 
 		@{
 			int prev = int.Parse(TempData["PageNbr"].ToString()) - 1;

@@ -1,6 +1,4 @@
-using System.Configuration;
 using CommerceHelperDB.Models;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

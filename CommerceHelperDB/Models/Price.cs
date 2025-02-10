@@ -1,5 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-
 namespace CommerceHelperDB.Models;
 
 public class Price
